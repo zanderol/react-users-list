@@ -8,7 +8,6 @@ export const Users = ({
   searchValue,
   onChangeSearchValue,
 }) => {
-  console.log(searchValue);
   return (
     <>
       <div className="search">
@@ -30,9 +29,18 @@ export const Users = ({
         </div>
       ) : (
         <ul className="users-list">
-          {items.map((item) => (
-            <User key={item.id} {...item} />
-          ))}{" "}
+          {items
+            .filter((item) => {
+              const fullName = (item.first_name + item.last_name).toLowerCase();
+
+              return (
+                fullName.includes(searchValue.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchValue.toLowerCase())
+              );
+            })
+            .map((item) => (
+              <User key={item.id} {...item} />
+            ))}{" "}
         </ul>
       )}
       <button className="send-invite-btn">Отправить приглашение</button>
